@@ -7,13 +7,12 @@
 <html>
   <body>
     <form action="upload" method="POST" enctype="multipart/form-data">
-      Upload Text: <input type="text" name="text"><br>
+      Provide URL: <input type="text" name="text"><br>
       <input type="submit" name="submit" value="Submit">
     </form>
     {% for text_entity in text_entities %}
       <p>Text: {{text_entity['text']}}</p>
-      <p>Uploaded: {{text_entity['timestamp']}}</p>
-      <p>Overall Sentiment: {{text_entity['sentiment']}}</p>
+      <p>Categories: {{text_entity['categories']}}</p>
     {% endfor %}
   </body>
 </html> 
