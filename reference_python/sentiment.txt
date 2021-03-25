@@ -1,0 +1,43 @@
+# Code from Google at https://codelabs.developers.google.com/codelabs/cloud-natural-language-python3#7
+# Probably would be better off changing all the functions to follow the Google standard ones from the codelab, and then making 
+# small modifications to the rest of the code to make it all work together.
+
+def analyze_text_sentiment(text):
+    client = language.LanguageServiceClient()
+    document = language.Document(content=text, type_=language.Document.Type.PLAIN_TEXT)
+
+    response = client.analyze_sentiment(document=document)
+
+    sentiment = response.document_sentiment
+    results = dict(
+        text=text,
+        score=f"{sentiment.score:.1%}",
+        magnitude=f"{sentiment.magnitude:.1%}",
+    )
+    
+    # Get sentiment for all sentences in the document
+    sentence_sentiment = []
+    for sentence in response.sentences:
+        item={}
+        item["text"]=sentence.text.content
+        item["sentiment score"]=sentence.sentiment.score
+        item["sentiment magnitude"]=sentence.sentiment.magnitude
+        sentence_sentiment.append(item)
+    
+    return sentence_sentiment
+
+
+text_en = "Plug in the input text here"
+analyze_text_sentiment(text_en)
+
+sentiment = analyze_text_sentiment(text_en)[0].get('sentiment score')
+
+# Assign a label based on the score
+overall_sentiment_en = 'unknown'
+if sentiment > 0:
+    overall_sentiment_en = 'positive'
+if sentiment < 0:
+    overall_sentiment_en = 'negative'
+if sentiment == 0:
+    overall_sentiment_en = 'neutral'
+overall_sentiment_en
