@@ -33,7 +33,7 @@ def homepage():
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload_text():
-    url = request.form["url"]
+    url = request.form["text"]
 
     resp = requests.get(url)
     tree = ET.ElementTree(ET.fromstring(resp.content))
