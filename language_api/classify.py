@@ -51,13 +51,17 @@ def upload_text():
     kind = "Sentences"
 
     # Create the Cloud Datastore key for the new entity.
-    key = datastore_client.key(kind, 'sample_task')
+    
 
-    for item in news_items:
+    for i,item in enumerate(news_items):
         categories = gcp_classify_text(item)
-        entity = datastore.Entity(key)
+        key = datastore_client.key(kind, 'sample_task'+str(i))
+        entity = datastore.Entity(key, exclude_from_indexes=('text', 'categories'))
         entity["text"] = item
-        entity["categories"] = categories
+        cats = []
+        for category in categories:
+            cats.append(f"category  : {category.name} with confidence: {category.confidence:.0%}")
+        entity["categories"] = ','.join(cats)
 
         # Save the new entity to Datastore.
         datastore_client.put(entity)
